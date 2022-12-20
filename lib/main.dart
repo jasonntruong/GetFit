@@ -62,12 +62,13 @@ class _GetFitHomeState extends State<GetFitHome> {
                         onSelect: (String title) => setActiveTab(title)),
                   ]),
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        _activeTab == FRIENDS_TAB
-                            ? const Text("")
-                            : const WeeklySchedule(),
-                      ])
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      _activeTab == FRIENDS_TAB
+                          ? const Text("hello")
+                          : const WeeklySchedule(),
+                    ],
+                  ),
                 ],
               ),
             ),
