@@ -66,7 +66,7 @@ class _GetFitHomeState extends State<GetFitHome> {
                     children: <Widget>[
                       _activeTab == FRIENDS_TAB
                           ? const Text("hello")
-                          : const WeeklySchedule(),
+                          : const Expanded(flex: 1, child: ScheduleTab()),
                     ],
                   ),
                 ],

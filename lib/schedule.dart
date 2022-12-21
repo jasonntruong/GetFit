@@ -1,25 +1,18 @@
-import 'dart:ffi';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WeeklySchedule extends StatefulWidget {
-  const WeeklySchedule({Key? key}) : super(key: key);
+  const WeeklySchedule({Key? key, required this.weekSchedule})
+      : super(key: key);
+  final Map<String, Map<String, String>> weekSchedule;
   @override
-  State<WeeklySchedule> createState() => _WeekdlyScheduleState();
+  State<WeeklySchedule> createState() => _WeeklyScheduleState();
 }
 
-class _WeekdlyScheduleState extends State<WeeklySchedule> {
-  final Map _weekSchedule = {
-    "Sunday": {"Start": "11:30 AM", "End": "1:30 PM"},
-    "Monday": {"Start": "9:30 AM", "End": "12:30 PM"},
-    "Tuesday": {"Start": "9:30 AM", "End": "12:30 PM"},
-    "Wednesday": {"Start": "9:30 AM", "End": "12:30 PM"},
-    "Thursday": {"Start": "9:30 AM", "End": "12:30 PM"},
-    "Friday": {"Start": "9:30 AM", "End": "12:30 PM"},
-    "Saturday": {"Start": "9:30 AM", "End": "12:30 PM"},
-  };
-
+class _WeeklyScheduleState extends State<WeeklySchedule> {
   void updateSchedule(day, type, DateTime time) {
     String _ending = "AM";
     int _hour = time.hour;
@@ -30,7 +23,7 @@ class _WeekdlyScheduleState extends State<WeeklySchedule> {
       _hour = 12;
     }
     setState(() => {
-          _weekSchedule[day][type] = _hour.toString() +
+          widget.weekSchedule[day]?[type] = _hour.toString() +
               ":" +
               (time.minute < 10 ? "0" : "") +
               time.minute.toString() +
@@ -42,7 +35,7 @@ class _WeekdlyScheduleState extends State<WeeklySchedule> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: _weekSchedule.keys
+      children: widget.weekSchedule.keys
           .map(
             (day) => Padding(
               padding: const EdgeInsets.only(top: 18.0, left: 36.0),
@@ -67,14 +60,14 @@ class _WeekdlyScheduleState extends State<WeeklySchedule> {
                   ),
                   TimeLabel(
                     title: "Start:",
-                    time: _weekSchedule[day]["Start"],
+                    time: widget.weekSchedule[day]?["Start"] ?? "11:30 AM",
                     day: day,
                     updateSchedule: (time) =>
                         updateSchedule(day, "Start", time),
                   ),
                   TimeLabel(
                     title: "End:",
-                    time: _weekSchedule[day]["End"],
+                    time: widget.weekSchedule[day]?["End"] ?? "11:30 AM",
                     day: day,
                     updateSchedule: (time) => updateSchedule(day, "End", time),
                   ),
@@ -132,26 +125,134 @@ class _TimeLabelState extends State<TimeLabel> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          CupertinoButton(
-              alignment: Alignment.centerLeft,
-              onPressed: () => _showDialog(
-                    CupertinoDatePicker(
-                      onDateTimeChanged: (time) => widget.updateSchedule(time),
-                      backgroundColor: Colors.white,
-                      mode: CupertinoDatePickerMode.time,
+      child: SizedBox(
+        width: 75,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            CupertinoButton(
+                alignment: Alignment.centerLeft,
+                onPressed: () => _showDialog(
+                      CupertinoDatePicker(
+                        onDateTimeChanged: (time) =>
+                            widget.updateSchedule(time),
+                        backgroundColor: Colors.white,
+                        mode: CupertinoDatePickerMode.time,
+                      ),
                     ),
-                  ),
-              child: Text(widget.time),
-              padding: const EdgeInsets.all(0)),
-        ],
+                child: Text(widget.time),
+                padding: const EdgeInsets.all(0)),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class ScheduleTab extends StatefulWidget {
+  const ScheduleTab({Key? key}) : super(key: key);
+  @override
+  State<ScheduleTab> createState() => _ScheduleTabState();
+}
+
+class _ScheduleTabState extends State<ScheduleTab> {
+  bool _isLoaded = false;
+
+  final Map<String, Map<String, String>> _defaultWeekSchedule = {
+    "Sunday": {"Start": "11:30 AM", "End": "1:30 PM"},
+    "Monday": {"Start": "9:30 AM", "End": "12:30 PM"},
+    "Tuesday": {"Start": "9:30 AM", "End": "12:30 PM"},
+    "Wednesday": {"Start": "9:30 AM", "End": "12:30 PM"},
+    "Thursday": {"Start": "9:30 AM", "End": "12:30 PM"},
+    "Friday": {"Start": "9:30 AM", "End": "12:30 PM"},
+    "Saturday": {"Start": "9:30 AM", "End": "12:30 PM"},
+  };
+
+  Map<String, Map<String, String>> _weekSchedule = {};
+
+  void onLoad() async {
+    if (_weekSchedule.keys.isEmpty) {
+      Map<String, Map<String, String>> prefSchedule = await getWeekSchedule();
+      setState(() {
+        _weekSchedule = prefSchedule;
+        _isLoaded = true;
+      });
+    }
+  }
+
+  Future<Map<String, Map<String, String>>> getWeekSchedule() async {
+    String? schedule;
+    await SharedPreferences.getInstance().then((prefs) => {
+          schedule = prefs.getString('schedule') as String,
+          if (schedule == null)
+            prefs.setString('schedule', jsonEncode(_defaultWeekSchedule))
+        });
+    if (schedule == null) return _defaultWeekSchedule;
+    return formatWeekScheduleFromSharedPreferences(
+        await jsonDecode(schedule as String));
+  }
+
+  Map<String, Map<String, String>> formatWeekScheduleFromSharedPreferences(
+      sharedPrefsJSON) {
+    final Map<String, Map<String, String>> weekSchedule =
+        Map<String, Map<String, String>>.from(_defaultWeekSchedule);
+    weekSchedule.keys.forEach((key) => {
+          weekSchedule[key]?["Start"] = sharedPrefsJSON[key]?["Start"],
+          weekSchedule[key]?["End"] = sharedPrefsJSON[key]?["End"],
+        });
+    return weekSchedule;
+  }
+
+  saveWeekSchedule() async {
+    await SharedPreferences.getInstance().then(
+      (prefs) => {
+        prefs.setString('schedule', jsonEncode(_weekSchedule)),
+      },
+    );
+  }
+
+  discardWeekSchedule() async {
+    Map<String, Map<String, String>> prefSchedule = await getWeekSchedule();
+    setState(() {
+      _weekSchedule = prefSchedule;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    onLoad();
+    return _isLoaded
+        ? Column(
+            children: [
+              WeeklySchedule(
+                weekSchedule: _weekSchedule,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 30),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CupertinoButton(
+                      onPressed: discardWeekSchedule,
+                      child: const Text("Discard Changes")),
+                  CupertinoButton.filled(
+                    padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
+                    onPressed: saveWeekSchedule,
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
   }
 }
