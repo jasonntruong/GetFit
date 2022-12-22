@@ -174,6 +174,12 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
   Map<String, Map<String, String>> _weekSchedule = {};
 
+  @override
+  void initState() {
+    super.initState();
+    onLoad();
+  }
+
   void onLoad() async {
     if (_weekSchedule.keys.isEmpty) {
       Map<String, Map<String, String>> prefSchedule = await getWeekSchedule();
@@ -187,7 +193,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
   Future<Map<String, Map<String, String>>> getWeekSchedule() async {
     String? schedule;
     await SharedPreferences.getInstance().then((prefs) => {
-          schedule = prefs.getString('schedule') as String,
+          schedule = prefs.getString('schedule'),
           if (schedule == null)
             prefs.setString('schedule', jsonEncode(_defaultWeekSchedule))
         });
@@ -224,7 +230,6 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
   @override
   Widget build(BuildContext context) {
-    onLoad();
     return _isLoaded
         ? Column(
             children: [

@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_fit/camera.dart';
 import 'package:get_fit/title.dart';
 import 'package:get_fit/tab.dart';
 import 'package:get_fit/schedule.dart';
+import 'package:camera/camera.dart';
 
-void main() {
+late List<CameraDescription> _cameras;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _cameras = await availableCameras();
   runApp(const GetFit());
 }
 
@@ -46,10 +51,14 @@ class _GetFitHomeState extends State<GetFitHome> {
   Widget build(BuildContext context) {
     if (_activeTab == '') setActiveTab(FRIENDS_TAB);
     return CupertinoPageScaffold(
-      child: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        child: Stack(
+      // removes any overflow
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Column(
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            ),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -64,9 +73,12 @@ class _GetFitHomeState extends State<GetFitHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      _activeTab == FRIENDS_TAB
-                          ? const Text("hello")
-                          : const Expanded(flex: 1, child: ScheduleTab()),
+                      Expanded(
+                        flex: 1,
+                        child: _activeTab == FRIENDS_TAB
+                            ? Camera(cameras: _cameras)
+                            : const ScheduleTab(),
+                      ),
                     ],
                   ),
                 ],
