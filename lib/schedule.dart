@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeeklySchedule extends StatefulWidget {
@@ -105,14 +104,10 @@ class _TimeLabelState extends State<TimeLabel> {
       builder: (BuildContext context) => Container(
         height: 216,
         padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system
-        // navigation bar.
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        // Provide a background color for the popup.
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
+        color: CupertinoColors.white,
         child: SafeArea(
           top: false,
           child: child,
@@ -140,7 +135,7 @@ class _TimeLabelState extends State<TimeLabel> {
                       CupertinoDatePicker(
                         onDateTimeChanged: (time) =>
                             widget.updateSchedule(time),
-                        backgroundColor: Colors.white,
+                        backgroundColor: CupertinoColors.white,
                         mode: CupertinoDatePickerMode.time,
                       ),
                     ),
@@ -246,7 +241,8 @@ class _ScheduleTabState extends State<ScheduleTab> {
                     child: const Text(
                       "Save",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
+                          color: CupertinoColors.black,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

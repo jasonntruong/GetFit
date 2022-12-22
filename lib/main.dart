@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get_fit/title.dart';
 import 'package:get_fit/tab.dart';
 import 'package:get_fit/schedule.dart';
@@ -16,10 +15,11 @@ class GetFit extends StatelessWidget {
     return const CupertinoApp(
         title: 'GetFit.',
         theme: CupertinoThemeData(
-            primaryColor: Colors.white,
-            scaffoldBackgroundColor: Colors.black,
+            primaryColor: CupertinoColors.white,
+            scaffoldBackgroundColor: CupertinoColors.black,
             textTheme: CupertinoTextThemeData(
-                textStyle: TextStyle(color: Colors.white, fontSize: 16.0))),
+                textStyle:
+                    TextStyle(color: CupertinoColors.white, fontSize: 16.0))),
         home: GetFitHome(title: 'GetFit.'));
   }
 }
