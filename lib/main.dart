@@ -76,7 +76,7 @@ class _GetFitHomeState extends State<GetFitHome> {
                       Expanded(
                         flex: 1,
                         child: _activeTab == FRIENDS_TAB
-                            ? Camera(cameras: _cameras)
+                            ? CameraView(cameras: _cameras)
                             : const ScheduleTab(),
                       ),
                     ],
