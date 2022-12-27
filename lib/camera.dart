@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:camera/camera.dart';
 import 'package:get_fit/friends.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({Key? key, required this.cameras}) : super(key: key);
@@ -49,7 +50,7 @@ class _CameraViewState extends State<CameraView> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    if (_imagePath != '') return Friends(imagePath: _imagePath);
+    // if (_imagePath != '') return Friends(imagePath: _imagePath);
     return (_isLoaded && _controller.value.isInitialized)
         ? Stack(
             children: [
@@ -66,6 +67,17 @@ class _CameraViewState extends State<CameraView> {
                     onPressed: () async {
                       try {
                         final image = await _controller.takePicture();
+                        final objectDetectorOptions = ObjectDetectorOptions(
+                            mode: DetectionMode.single,
+                            classifyObjects: true,
+                            multipleObjects: true);
+                        final objectDetector = GoogleMlKit.vision
+                            .objectDetector(options: objectDetectorOptions);
+                        final List<DetectedObject> foundObjects =
+                            await objectDetector.processImage(
+                                InputImage.fromFilePath(image.path));
+                        foundObjects.forEach((object) => object.labels
+                            .forEach((label) => print(label.text)));
                         setState(() {
                           _imagePath = image.path;
                         });
