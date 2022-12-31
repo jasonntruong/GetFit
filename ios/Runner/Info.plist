@@ -47,5 +47,7 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>To take your gym images</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To take your gym images</string>
 </dict>
 </plist>

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:camera/camera.dart';
 import 'package:get_fit/friends.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:tflite/tflite.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({Key? key, required this.cameras}) : super(key: key);
@@ -20,13 +21,22 @@ class _CameraViewState extends State<CameraView> {
   @override
   void initState() {
     loadCameras();
+    loadModel();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    Tflite.close();
     _controller.dispose();
+  }
+
+  Future loadModel() async {
+    Tflite.close();
+    await Tflite.loadModel(
+        model: "assets/ssd_mobilenet.tflite",
+        labels: "assets/ssd_mobilenet.txt");
   }
 
   void loadCameras() async {
@@ -76,8 +86,16 @@ class _CameraViewState extends State<CameraView> {
                         final List<DetectedObject> foundObjects =
                             await objectDetector.processImage(
                                 InputImage.fromFilePath(image.path));
-                        foundObjects.forEach((object) => object.labels
-                            .forEach((label) => print(label.text)));
+                        foundObjects.forEach((object) => object.labels.forEach(
+                            (label) => print(label.confidence.toString() +
+                                ' ' +
+                                label.text)));
+                        final List? recogList =
+                            await Tflite.detectObjectOnImage(path: image.path);
+                        recogList?.forEach((el) => {
+                              if (el["confidenceInClass"] > 0.4)
+                                print(el["detectedClass"])
+                            });
                         setState(() {
                           _imagePath = image.path;
                         });
