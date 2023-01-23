@@ -13,5 +13,6 @@
   },
   "[dart]": { "editor.defaultFormatter": "Dart-Code.dart-code" },
   "editor.formatOnSave": true,
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "cmake.sourceDirectory": "${workspaceFolder}/linux"
 }

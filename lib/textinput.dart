@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-import 'imagePreview.dart';
-
 class TextInput extends StatefulWidget {
   const TextInput({Key? key, required this.placeholder}) : super(key: key);
   final String placeholder;
