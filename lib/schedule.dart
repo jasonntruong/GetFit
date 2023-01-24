@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get_fit/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeeklySchedule extends StatefulWidget {
@@ -149,7 +150,9 @@ class _TimeLabelState extends State<TimeLabel> {
 }
 
 class ScheduleTab extends StatefulWidget {
-  const ScheduleTab({Key? key}) : super(key: key);
+  const ScheduleTab({Key? key, required this.notificationController})
+      : super(key: key);
+  final NotificationController? notificationController;
   @override
   State<ScheduleTab> createState() => _ScheduleTabState();
 }
@@ -209,6 +212,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
   }
 
   saveWeekSchedule() async {
+    await widget.notificationController!.cancelAllScheduledNotifications();
     await SharedPreferences.getInstance().then(
       (prefs) => {
         prefs.setString('schedule', jsonEncode(_weekSchedule)),

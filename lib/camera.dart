@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get_fit/notification.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:camera/camera.dart';
@@ -85,6 +86,7 @@ class _CameraViewState extends State<CameraView> {
           (response["confidence"] as double).toStringAsFixed(2) +
           "\n\n";
     });
+    print(recognitions);
     setState(() {
       _foundObjects;
     });
@@ -119,6 +121,21 @@ class _CameraViewState extends State<CameraView> {
                     onPressed: () async {
                       try {
                         final image = await _controller.takePicture();
+                        NotificationController notificationController =
+                            NotificationController();
+                        await notificationController.setupNotifications();
+                        // await showNotification();
+                        await notificationController.scheduleNotification(5,
+                            id: 0);
+                        await notificationController.scheduleNotification(10,
+                            id: 1);
+                        await notificationController.scheduleNotification(15,
+                            id: 2);
+                        await notificationController
+                            .cancelScheduleNotification(1);
+                        await notificationController
+                            .cancelScheduleNotification(2);
+
                         setState(() {
                           _imagePath = image.path;
                         });

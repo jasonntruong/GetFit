@@ -4,13 +4,17 @@ import 'package:get_fit/title.dart';
 import 'package:get_fit/tab.dart';
 import 'package:get_fit/schedule.dart';
 import 'package:camera/camera.dart';
+import 'package:get_fit/notification.dart';
 
 late List<CameraDescription> _cameras;
+NotificationController? notificationController;
+
 String _customModelPath = "";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _cameras = await availableCameras();
-
+  notificationController = NotificationController();
+  await notificationController!.setupNotifications();
   runApp(const GetFit());
 }
 
@@ -80,7 +84,9 @@ class _GetFitHomeState extends State<GetFitHome> {
                         child: _activeTab == FRIENDS_TAB
                             ? CameraView(
                                 cameras: _cameras, modelPath: _customModelPath)
-                            : const ScheduleTab(),
+                            : ScheduleTab(
+                                notificationController: notificationController,
+                              ),
                       ),
                     ],
                   ),
