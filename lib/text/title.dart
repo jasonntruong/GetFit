@@ -1,3 +1,5 @@
+/// Title widget
+
 import 'package:flutter/cupertino.dart';
 
 class TopTitle extends StatelessWidget {

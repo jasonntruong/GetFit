@@ -1,3 +1,5 @@
+/// Text input widget
+
 import 'package:flutter/cupertino.dart';
 
 class TextInput extends StatefulWidget {
@@ -28,7 +30,8 @@ class _TextInputState extends State<TextInput> {
             controller: _textController,
             textAlign: TextAlign.center,
             placeholder: widget.placeholder,
-            placeholderStyle: TextStyle(color: CupertinoColors.inactiveGray),
+            placeholderStyle:
+                const TextStyle(color: CupertinoColors.inactiveGray),
             onEditingComplete: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },

@@ -1,15 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
-import 'package:get_fit/camera.dart';
-import 'package:get_fit/title.dart';
-import 'package:get_fit/tab.dart';
+import 'package:get_fit/alerts/alert.dart';
+import 'package:get_fit/helper/app_state.dart';
+import 'package:get_fit/camera/camera.dart';
 import 'package:get_fit/schedule.dart';
 import 'package:camera/camera.dart';
-import 'package:get_fit/notification.dart';
+import 'package:get_fit/alerts/notification.dart';
+import 'package:get_fit/tabs/tab_selector.dart';
+import 'package:get_fit/text/title.dart';
+
+import 'home.dart';
 
 late List<CameraDescription> _cameras;
 NotificationController? notificationController;
 
-String _customModelPath = "";
+String appState = "";
+
+Map<String, String> tabs = {
+  "HOME": 'Home',
+  "SCHEDULE": 'Schedule',
+};
+String activeTab = tabs["HOME"]!;
+
+// imgPath is updated from storage in app_state
+String imgPath = "";
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _cameras = await availableCameras();
@@ -44,18 +60,56 @@ class GetFitHome extends StatefulWidget {
 }
 
 class _GetFitHomeState extends State<GetFitHome> {
-  final FRIENDS_TAB = 'My Friends';
-  final SCHEDULE = 'Schedule';
-  String _activeTab = '';
+  Timer? timer;
+
+  /// Sets active tab
   void setActiveTab(tabTitle) {
-    setState(() {
-      _activeTab = tabTitle;
+    if (appState != appStates["IMAGE"] &&
+        appState != appStates["UNCONFIRMED"]) {
+      setState(() {
+        activeTab = tabTitle;
+      });
+    }
+    if (appState == appStates["IMAGE"]) {
+      showAlert1Action(context, "Take an Image",
+          "\nYou cannot switch tabs until you've taken an image", "Ok", null);
+    } else if (appState == appStates["UNCONFIRMED"]) {
+      showAlert1Action(
+          context,
+          "Confirm schedule",
+          "\nYou cannot switch tabs until you've confirmed your schedule",
+          "Ok",
+          null);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    notificationController!.setContext(context);
+    pollAppState(context).then((s) => {
+          setState(() {
+            activeTab;
+          })
+        });
+
+    timer = Timer.periodic(const Duration(seconds: 3), (Timer t) async {
+      await pollAppState(context);
+      setState(() {
+        activeTab;
+      });
     });
   }
 
   @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (_activeTab == '') setActiveTab(FRIENDS_TAB);
+    if (activeTab == '') setActiveTab(tabs["HOME"]);
     return CupertinoPageScaffold(
       // removes any overflow
       child: SingleChildScrollView(
@@ -71,9 +125,9 @@ class _GetFitHomeState extends State<GetFitHome> {
                 children: [
                   TopTitle(name: widget.title),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    SelectionTabs(
-                        titles: [FRIENDS_TAB, SCHEDULE],
-                        activeTab: _activeTab,
+                    TabSelector(
+                        titles: [tabs["HOME"]!, tabs["SCHEDULE"]!],
+                        activeTab: activeTab,
                         onSelect: (String title) => setActiveTab(title)),
                   ]),
                   Row(
@@ -81,9 +135,12 @@ class _GetFitHomeState extends State<GetFitHome> {
                     children: <Widget>[
                       Expanded(
                         flex: 1,
-                        child: _activeTab == FRIENDS_TAB
-                            ? CameraView(
-                                cameras: _cameras, modelPath: _customModelPath)
+                        child: activeTab == tabs["HOME"]
+                            ? appState == appStates["IMAGE"]
+                                ? CameraView(
+                                    cameras: _cameras,
+                                  )
+                                : Home(imagePath: imgPath)
                             : ScheduleTab(
                                 notificationController: notificationController,
                               ),
