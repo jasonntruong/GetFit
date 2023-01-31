@@ -1,16 +1,35 @@
-# get_fit
+# GetFit
 
-A new Flutter project.
+BeReal for the gym. It's time to GetFit >:)
 
-## Getting Started
+## Solution
+- At the beginning of the week, the user enters their gym schedule
+- Based on the schedule, when they "should" be working out, they get a notification to take a picture within 2 minutes
+- They get to retake the pic until the app sees a dumbbell in the image
+- If it does, you pass - great job. If it doesn't after 2 min you get charged $2 for skipping the gym
+- That fee is tracked and should be donated to charity
 
-This project is a starting point for a Flutter application.
+## Scenarios
+- ### Take an image (Notification)
+- ### Take an image (Screen)
 
-A few resources to get you started if this is your first Flutter project:
+- ### Dumbbell found in image
+- ### No dumbbell found in image
+- ### No dumbbell after 2 min
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- ### Donation
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- ### Schedule
+- ### Schedule error
+- ### Schedule not entered for the week (Notification)
+- ### Scheduled not entered for the week (Alert)
+
+## Why it was built
+I need to go to the gym man
+
+## Technologies
+- App developed using Flutter, Dart, Python, and Xcode
+- Dumbbell detection model was trained using Tensorflow Lite
+- Features include: Computer Vision, Object Detection, Notifications
+
+### Developed for iOS. Cannot gurantee it works on Android
