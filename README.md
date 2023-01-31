@@ -10,19 +10,19 @@ BeReal for the gym. It's time to GetFit >:)
 - That fee is tracked and should be donated to charity
 
 ## Scenarios
-- ### Take an image (Notification)
-- ### Take an image (Screen)
+- ### [Take an image (Notification)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/image/imageNotification.PNG)
+- ### [Take an image (Screen)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/image/imageScreen.PNG)
 
-- ### Dumbbell found in image
-- ### No dumbbell found in image
-- ### No dumbbell after 2 min
+- ### [Dumbbell found in image](https://github.com/jasonntruong/GetFit/blob/main/screenshots/home/dumbbellFound.PNG)
+- ### [No dumbbell found in image](https://github.com/jasonntruong/GetFit/blob/main/screenshots/home/noDumbbellAlert.PNG)
+- ### [No dumbbell after 2 min](https://github.com/jasonntruong/GetFit/blob/main/screenshots/home/noDumbbell.PNG)
 
-- ### Donation
+- ### [Donation](https://github.com/jasonntruong/GetFit/blob/main/screenshots/donation/donation.PNG)
 
-- ### Schedule
-- ### Schedule error
-- ### Schedule not entered for the week (Notification)
-- ### Scheduled not entered for the week (Alert)
+- ### [Schedule](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/schedule.PNG)
+- ### [Schedule error](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleError.PNG)
+- ### [Schedule not entered for the week (Notification)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleNotification.PNG)
+- ### [Scheduled not entered for the week (Alert)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleError.PNG)
 
 ## Why it was built
 I need to go to the gym man
