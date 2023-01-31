@@ -9,6 +9,21 @@ BeReal for the gym. It's time to GetFit >:)
 - If it does, you pass - great job. If it doesn't after 2 min you get charged $2 for skipping the gym
 - That fee is tracked and should be donated to charity
 
+## Scenarios
+- ### Take an image (Notification)
+- ### Take an image (Screen)
+
+- ### Dumbbell found in image
+- ### No dumbbell found in image
+- ### No dumbbell after 2 min
+
+- ### Donation
+
+- ### Schedule
+- ### Schedule error
+- ### Schedule not entered for the week (Notification)
+- ### Scheduled not entered for the week (Alert)
+
 ## Why it was built
 I need to go to the gym man
 
