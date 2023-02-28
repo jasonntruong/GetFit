@@ -22,7 +22,7 @@ BeReal for the gym. It's time to GetFit >:)
 - ### [Schedule](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/schedule.PNG)
 - ### [Schedule error](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleError.PNG)
 - ### [Schedule not entered for the week (Notification)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleNotification.PNG)
-- ### [Scheduled not entered for the week (Alert)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleError.PNG)
+- ### [Scheduled not entered for the week (Alert)](https://github.com/jasonntruong/GetFit/blob/main/screenshots/schedule/scheduleAlert.PNG)
 
 ## Why it was built
 I need to go to the gym man
