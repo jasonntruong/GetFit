@@ -31,5 +31,3 @@ I need to go to the gym man
 - App developed using Flutter, Dart, Python, and Xcode
 - Dumbbell detection model was trained using Tensorflow Lite
 - Features include: Computer Vision, Object Detection, Notifications
-
-### Developed for iOS. Cannot gurantee it works on Android
