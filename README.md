@@ -2,6 +2,13 @@
 
 BeReal for the gym. It's time to GetFit >:)
 
+Maintaining a regular workout schedule is **hard.** That's why I built a BeReal dupe that'll notify you to take a picture during your gym routine. It scans the image with a **Tensorflow Lite** model I trained, and if it doesn't detect workout equipment, you're charged **$2** for missing the gym!
+
+## Technologies
+- App developed using Flutter, Dart, Python, and Xcode
+- Dumbbell detection model was trained using Tensorflow Lite
+- Features include: Computer Vision, Object Detection, Notifications
+
 ## Solution
 - At the beginning of the week, the user enters their gym schedule
 - Based on the schedule, when they "should" be working out, they get a notification to take a picture within 2 minutes
@@ -26,8 +33,3 @@ BeReal for the gym. It's time to GetFit >:)
 
 ## Why it was built
 I need to go to the gym man
-
-## Technologies
-- App developed using Flutter, Dart, Python, and Xcode
-- Dumbbell detection model was trained using Tensorflow Lite
-- Features include: Computer Vision, Object Detection, Notifications
