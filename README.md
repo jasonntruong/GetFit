@@ -11,7 +11,7 @@ Maintaining a regular workout schedule is **hard.** That's why I built a BeReal 
 
 ## Solution
 - At the beginning of the week, the user enters their gym schedule
-- Based on the schedule, when they "should" be working out, they get a notification to take a picture within 2 minutes
+- Based on the schedule, when they "should" be working out, they get a random notification to take a picture within 2 minutes
 - They get to retake the pic until the app sees a dumbbell in the image
 - If it does, you pass - great job. If it doesn't after 2 min you get charged $2 for skipping the gym
 - That fee is tracked and should be donated to charity
